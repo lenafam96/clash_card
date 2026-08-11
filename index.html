@@ -1,539 +1,1066 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Thẻ Bài Clash - So Sánh 2 Nick</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --bg-deep:#0e2118;
-    --bg-mid:#1c3826;
-    --gold:#f0b23c;
-    --gold-bright:#ffd873;
-    --ember:#e0562f;
-    --slot-empty:#46402f;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thẻ Bài Clash - So Sánh 2 Nick</title>
+  <meta og:title="Thẻ Bài Clash - So Sánh 2 Nick" />
+  <meta org:description="Công cụ theo dõi & trao đổi bộ sưu tập thẻ bài Clash Royale giữa 2 nick. Bấm vào thẻ để tăng số lượng (0 → x1 → x2 → x3 → quay lại 0). Dữ liệu được lưu tự động vào bộ nhớ trình duyệt (localStorage) trên máy này." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="icon" type="image/png" href="./img/barbarian2.png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Nunito:wght@500;700;800&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-deep: #0e2118;
+      --bg-mid: #1c3826;
+      --gold: #f0b23c;
+      --gold-bright: #ffd873;
+      --ember: #e0562f;
+      --slot-empty: #46402f;
 
-    --c-elixir:#8a4fc2;   --c-elixir-2:#c586f2;
-    --c-dark:#4a2e6b;     --c-dark-2:#8258b0;
-    --c-builder:#2f8fd1;  --c-builder-2:#6cc2f0;
-    --c-super:#d1651f;    --c-super-2:#f2a03c;
+      --c-elixir: #8a4fc2;
+      --c-elixir-2: #c586f2;
+      --c-dark: #4a2e6b;
+      --c-dark-2: #8258b0;
+      --c-builder: #2f8fd1;
+      --c-builder-2: #6cc2f0;
+      --c-super: #d1651f;
+      --c-super-2: #f2a03c;
 
-    --acc-a:#39c2c2;  --acc-a-2:#8af0f0;
-    --acc-b:#e0568f;  --acc-b-2:#f7a8c7;
-  }
+      --acc-a: #39c2c2;
+      --acc-a-2: #8af0f0;
+      --acc-b: #e0568f;
+      --acc-b-2: #f7a8c7;
+    }
 
-  *{box-sizing:border-box;}
+    * {
+      box-sizing: border-box;
+    }
 
-  html,body{
-    margin:0; min-height:100%;
-    background:
-      radial-gradient(ellipse at 50% -10%, #2a4d33 0%, transparent 55%),
-      repeating-linear-gradient(135deg, rgba(255,255,255,0.02) 0 2px, transparent 2px 26px),
-      linear-gradient(180deg, var(--bg-mid) 0%, var(--bg-deep) 100%);
-    font-family:'Nunito', sans-serif;
-    color:#f2e6c8;
-  }
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(ellipse at 50% -10%, #2a4d33 0%, transparent 55%),
+        repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0 2px, transparent 2px 26px),
+        linear-gradient(180deg, var(--bg-mid) 0%, var(--bg-deep) 100%);
+      font-family: 'Nunito', sans-serif;
+      color: #f2e6c8;
+    }
 
-  .wrap{ max-width:1400px; margin:0 auto; padding:24px 16px 60px; }
+    .wrap {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 16px 60px;
+    }
 
-  /* ---------- Header ---------- */
-  .banner{
-    position:relative;
-    background:linear-gradient(180deg, #3a2a55 0%, #24173a 100%);
-    border:3px solid var(--gold);
-    border-radius:14px;
-    padding:20px 24px 24px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.05);
-    margin-bottom:20px;
-  }
-  .banner::before{ content:""; position:absolute; inset:6px; border:1px solid rgba(240,178,60,0.35); border-radius:9px; pointer-events:none; }
-  h1{
-    font-family:'Cinzel', serif; font-weight:900;
-    font-size:clamp(22px, 3.4vw, 34px);
-    margin:0 0 6px; letter-spacing:.5px;
-    color:var(--gold-bright);
-    text-shadow:0 2px 0 #4a2a00, 0 4px 14px rgba(0,0,0,0.6);
-  }
-  .subtitle{ margin:0; font-size:14px; color:#d9c9ef; line-height:1.55; max-width:800px; }
+    /* ---------- Header ---------- */
+    .banner {
+      position: relative;
+      background: linear-gradient(180deg, #3a2a55 0%, #24173a 100%);
+      border: 3px solid var(--gold);
+      border-radius: 14px;
+      padding: 20px 24px 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+      margin-bottom: 20px;
+    }
 
-  .toolbar{ display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; }
-  .btn{
-    font-family:'Nunito',sans-serif; font-weight:800; font-size:12.5px;
-    border:1px solid rgba(240,178,60,0.5);
-    background:rgba(0,0,0,0.3); color:var(--gold-bright);
-    padding:8px 14px; border-radius:999px; cursor:pointer;
-    transition:background .15s ease, transform .1s ease;
-  }
-  .btn:hover{ background:rgba(240,178,60,0.15); }
-  .btn:active{ transform:scale(0.96); }
-  .btn.danger{ border-color:rgba(224,86,47,0.6); color:#ffb199; }
+    .banner::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border: 1px solid rgba(240, 178, 60, 0.35);
+      border-radius: 9px;
+      pointer-events: none;
+    }
 
-  .legend{ display:flex; gap:18px; flex-wrap:wrap; margin-top:12px; font-size:12px; color:#d9c9ef; }
-  .legend span{ display:flex; align-items:center; gap:7px; }
-  .swatch{ width:13px; height:13px; border-radius:4px; border:1px solid rgba(255,255,255,0.3); }
-  .swatch.g{ background:#555; filter:grayscale(1); }
-  .swatch.c{ background:linear-gradient(135deg,#f0b23c,#8a4fc2); }
-  .swatch.x{ background:linear-gradient(135deg,#e0562f,#f0b23c); }
+    h1 {
+      font-family: 'Cinzel', serif;
+      font-weight: 900;
+      font-size: clamp(22px, 3.4vw, 34px);
+      margin: 0 0 6px;
+      letter-spacing: .5px;
+      color: var(--gold-bright);
+      text-shadow: 0 2px 0 #4a2a00, 0 4px 14px rgba(0, 0, 0, 0.6);
+    }
 
-  /* ---------- Trade panel ---------- */
-  .trade-panel{
-    background:rgba(0,0,0,0.22);
-    border:2px solid var(--gold);
-    border-radius:14px;
-    padding:16px 18px 18px;
-    margin-bottom:22px;
-  }
-  .trade-panel h2{
-    font-family:'Cinzel',serif; font-size:17px; letter-spacing:.5px;
-    margin:0 0 4px; color:var(--gold-bright);
-    display:flex; align-items:center; gap:8px;
-  }
-  .trade-panel .trade-desc{ font-size:12.5px; color:#c9b8e6; margin:0 0 14px; }
+    .subtitle {
+      margin: 0;
+      font-size: 14px;
+      color: #d9c9ef;
+      line-height: 1.55;
+      max-width: 800px;
+    }
 
-  .trade-cols{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-  .trade-swap-col{ grid-column:1 / -1; }
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
 
-  .trade-block h3{
-    font-family:'Cinzel',serif; font-size:13px; letter-spacing:.5px; text-transform:uppercase;
-    margin:0 0 8px; display:flex; align-items:center; gap:6px;
-  }
-  .trade-block.a h3{ color:var(--acc-a-2); }
-  .trade-block.b h3{ color:var(--acc-b-2); }
-  .trade-block.swap h3{ color:var(--gold-bright); }
+    .btn {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 800;
+      font-size: 12.5px;
+      border: 1px solid rgba(240, 178, 60, 0.5);
+      background: rgba(0, 0, 0, 0.3);
+      color: var(--gold-bright);
+      padding: 8px 14px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: background .15s ease, transform .1s ease;
+    }
 
-  .trade-list{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:6px; }
-  .trade-item{
-    display:flex; align-items:center; gap:10px;
-    background:rgba(255,255,255,0.04);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:10px;
-    padding:6px 10px;
-    font-size:12.5px;
-  }
-  .trade-item img, .trade-item .ph{
-    width:28px; height:28px; border-radius:7px; object-fit:cover; flex-shrink:0;
-    border:1px solid rgba(255,255,255,0.2);
-  }
-  .trade-item .ph{ display:flex; align-items:center; justify-content:center; background:#4a4436; font-family:'Cinzel',serif; font-weight:800; font-size:10px; }
-  .trade-item .amt{ margin-left:auto; font-weight:800; color:var(--gold-bright); white-space:nowrap; }
-  .trade-empty{ font-size:12.5px; color:#8a9a8e; font-style:italic; }
+    .btn:hover {
+      background: rgba(240, 178, 60, 0.15);
+    }
 
-  .swap-item{
-    display:flex; align-items:center; gap:10px; flex-wrap:wrap;
-    background:linear-gradient(90deg, rgba(57,194,194,0.10), rgba(224,86,143,0.10));
-    border:1px solid rgba(240,178,60,0.35);
-    border-radius:10px;
-    padding:8px 12px;
-    font-size:12.5px;
-  }
-  .swap-item .side{ display:flex; align-items:center; gap:8px; }
-  .swap-item img, .swap-item .ph{ width:30px; height:30px; border-radius:8px; object-fit:cover; }
-  .swap-item .ph{ display:flex; align-items:center; justify-content:center; background:#4a4436; font-family:'Cinzel',serif; font-weight:800; font-size:10px; }
-  .swap-arrow{ color:var(--gold); font-weight:900; font-size:16px; }
+    .btn:active {
+      transform: scale(0.96);
+    }
 
-  /* ---------- Two-column compare grid ---------- */
-  .compare-grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px; align-items:start; }
+    .btn.danger {
+      border-color: rgba(224, 86, 47, 0.6);
+      color: #ffb199;
+    }
 
-  .account-col{ min-width:0; }
+    .legend {
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+      font-size: 12px;
+      color: #d9c9ef;
+    }
 
-  .account-head{
-    display:flex; align-items:center; gap:12px;
-    background:rgba(0,0,0,0.28);
-    border:2px solid var(--slot-empty);
-    border-radius:14px;
-    padding:12px 16px;
-    margin-bottom:16px;
-  }
-  .account-col.acc-a .account-head{ border-color:var(--acc-a); }
-  .account-col.acc-b .account-head{ border-color:var(--acc-b); }
+    .legend span {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
 
-  .account-avatar{
-    width:40px; height:40px; border-radius:10px; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Cinzel',serif; font-weight:900; font-size:16px; color:#1c1224;
-  }
-  .account-col.acc-a .account-avatar{ background:linear-gradient(160deg, var(--acc-a-2), var(--acc-a)); }
-  .account-col.acc-b .account-avatar{ background:linear-gradient(160deg, var(--acc-b-2), var(--acc-b)); }
+    .swatch {
+      width: 13px;
+      height: 13px;
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
 
-  .account-name-input{
-    font-family:'Cinzel',serif; font-weight:700; font-size:16px;
-    background:transparent; border:none; border-bottom:1px dashed rgba(255,255,255,0.3);
-    color:#f2e6c8; padding:2px 2px 3px; width:100%; max-width:220px;
-  }
-  .account-col.acc-a .account-name-input{ color:var(--acc-a-2); }
-  .account-col.acc-b .account-name-input{ color:var(--acc-b-2); }
-  .account-name-input:focus{ outline:none; border-bottom-color:var(--gold); }
+    .swatch.g {
+      background: #555;
+      filter: grayscale(1);
+    }
 
-  .account-total{
-    margin-left:auto; text-align:right; font-family:'Cinzel',serif;
-    color:var(--gold-bright); font-size:15px; white-space:nowrap;
-  }
-  .account-total .lbl{ display:block; font-family:'Nunito',sans-serif; font-size:10px; text-transform:uppercase; letter-spacing:.5px; color:#c9b8e6; }
+    .swatch.c {
+      background: linear-gradient(135deg, #f0b23c, #8a4fc2);
+    }
 
-  /* ---------- Group ---------- */
-  .group{ margin-top:14px; border-radius:14px; padding:12px 12px 14px; background:rgba(0,0,0,0.18); border:1px solid rgba(255,255,255,0.06); }
-  .group-head{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:10px; }
-  .group-badge{ width:30px; height:30px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-family:'Cinzel',serif; font-weight:700; font-size:11px; color:#1c1224; flex-shrink:0; }
-  .group-title{ font-family:'Cinzel',serif; font-size:13.5px; letter-spacing:.5px; text-transform:uppercase; margin:0; }
-  .group-counter{ margin-left:auto; display:flex; align-items:center; gap:6px; font-family:'Cinzel',serif; font-size:12.5px; color:var(--gold-bright); background:rgba(0,0,0,0.3); border-radius:999px; padding:3px 11px; border:1px solid rgba(255,255,255,0.1); }
-  .group-track{ height:6px; border-radius:999px; background:rgba(0,0,0,0.35); overflow:hidden; margin-bottom:12px; }
-  .group-fill{ height:100%; width:0%; transition:width .35s ease; }
+    .swatch.x {
+      background: linear-gradient(135deg, #e0562f, #f0b23c);
+    }
 
-  .group.elixir .group-badge{ background:linear-gradient(160deg, var(--c-elixir-2), var(--c-elixir)); }
-  .group.elixir .group-title{ color:var(--c-elixir-2); }
-  .group.elixir .group-fill{ background:linear-gradient(90deg, var(--c-elixir-2), var(--c-elixir)); }
-  .group.dark .group-badge{ background:linear-gradient(160deg, var(--c-dark-2), var(--c-dark)); }
-  .group.dark .group-title{ color:var(--c-dark-2); }
-  .group.dark .group-fill{ background:linear-gradient(90deg, var(--c-dark-2), var(--c-dark)); }
-  .group.builder .group-badge{ background:linear-gradient(160deg, var(--c-builder-2), var(--c-builder)); }
-  .group.builder .group-title{ color:var(--c-builder-2); }
-  .group.builder .group-fill{ background:linear-gradient(90deg, var(--c-builder-2), var(--c-builder)); }
-  .group.super .group-badge{ background:linear-gradient(160deg, var(--c-super-2), var(--c-super)); }
-  .group.super .group-title{ color:var(--c-super-2); }
-  .group.super .group-fill{ background:linear-gradient(90deg, var(--c-super-2), var(--c-super)); }
+    /* ---------- Trade panel ---------- */
+    .trade-panel {
+      background: rgba(0, 0, 0, 0.22);
+      border: 2px solid var(--gold);
+      border-radius: 14px;
+      padding: 16px 18px 18px;
+      margin-bottom: 22px;
+    }
 
-  /* ---------- Cards ---------- */
-  .grid{ display:grid; grid-template-columns:repeat(auto-fill, minmax(68px, 1fr)); gap:8px; }
+    .trade-panel h2 {
+      font-family: 'Cinzel', serif;
+      font-size: 17px;
+      letter-spacing: .5px;
+      margin: 0 0 4px;
+      color: var(--gold-bright);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-  .card{
-    position:relative; aspect-ratio:1/1; border-radius:11px; cursor:pointer;
-    user-select:none; -webkit-tap-highlight-color:transparent;
-    border:2px solid var(--slot-empty);
-    background:linear-gradient(180deg,#3a3327,#221d15);
-    overflow:hidden;
-    transition:transform .12s ease, border-color .2s ease, box-shadow .2s ease;
-    display:flex; align-items:center; justify-content:center;
-  }
-  .card:hover{ transform:translateY(-2px); }
-  .card:active{ transform:translateY(-1px) scale(0.96); }
-  .card:focus-visible{ outline:2px solid var(--gold-bright); outline-offset:2px; }
+    .trade-panel .trade-desc {
+      font-size: 12.5px;
+      color: #c9b8e6;
+      margin: 0 0 14px;
+    }
 
-  .card img{ width:100%; height:100%; object-fit:cover; filter:grayscale(1) brightness(0.55) contrast(0.9); transition:filter .25s ease; display:block; }
+    .trade-cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
 
-  .icon-placeholder{
-    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
-    font-family:'Cinzel',serif; font-weight:900; font-size:20px; color:#fff;
-    background:linear-gradient(150deg,#6b6255,#332d24);
-    filter:grayscale(1) brightness(0.55); transition:filter .25s ease;
-  }
+    .trade-swap-col {
+      grid-column: 1 / -1;
+    }
 
-  .card.owned img, .card.owned .icon-placeholder{ filter:none; }
-  .card.owned{ border-color:var(--gold); box-shadow:0 0 0 1px rgba(240,178,60,0.5), 0 4px 12px rgba(0,0,0,0.45); }
-  .card.owned::after{ content:""; position:absolute; inset:0; box-shadow:inset 0 0 18px rgba(240,178,60,0.35); pointer-events:none; }
+    .trade-block h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin: 0 0 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-  .card.needed-highlight{ border-color:var(--ember); }
-  .card.needed-highlight::before{
-    content:"?"; position:absolute; bottom:3px; left:3px;
-    width:14px; height:14px; border-radius:50%;
-    background:var(--ember); color:#fff; font-size:9px; font-weight:900;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 1px 3px rgba(0,0,0,0.5);
-    z-index:2;
-  }
+    .trade-block.a h3 {
+      color: var(--acc-a-2);
+    }
 
-  .card .name-tag{
-    position:absolute; left:0; right:0; bottom:0; padding:3px 4px 2px;
-    font-size:8.5px; font-weight:800; text-align:center; line-height:1.1; color:#fff;
-    background:linear-gradient(0deg, rgba(0,0,0,0.85), rgba(0,0,0,0));
-    text-shadow:0 1px 2px rgba(0,0,0,0.8);
-  }
-  .card:not(.owned) .name-tag{ color:#bcb6a8; }
+    .trade-block.b h3 {
+      color: var(--acc-b-2);
+    }
 
-  .new-flag{ position:absolute; top:3px; left:3px; font-size:6.5px; font-weight:800; background:var(--ember); color:#fff; padding:1.5px 4px; border-radius:4px; text-transform:uppercase; z-index:2; }
+    .trade-block.swap h3 {
+      color: var(--gold-bright);
+    }
 
-  .count-badge{
-    position:absolute; top:3px; right:3px; min-width:19px; height:19px; padding:0 4px;
-    border-radius:999px; background:linear-gradient(180deg, var(--gold-bright), var(--ember));
-    border:1.5px solid #3a1f0b; color:#2b1200; font-weight:800; font-size:10px;
-    display:flex; align-items:center; justify-content:center;
-    box-shadow:0 2px 5px rgba(0,0,0,0.5);
-    opacity:0; transform:scale(0.5); transition:opacity .18s ease, transform .18s ease;
-  }
-  .count-badge.show{ opacity:1; transform:scale(1); }
+    .trade-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
 
-  /* ---------- Icon path reference ---------- */
-  .icon-ref{ margin-top:26px; }
-  .icon-ref summary{
-    cursor:pointer; font-family:'Cinzel',serif; font-size:14px; color:var(--gold);
-    padding:10px 16px; background:rgba(0,0,0,0.25); border:1px solid rgba(240,178,60,0.3); border-radius:10px;
-  }
-  .icon-ref[open] summary{ border-radius:10px 10px 0 0; }
-  .icon-ref-body{
-    background:rgba(0,0,0,0.18); border:1px solid rgba(240,178,60,0.2); border-top:none;
-    border-radius:0 0 10px 10px; padding:14px 16px; font-size:12.5px;
-  }
-  .icon-ref-body p{ margin:0 0 10px; color:#c9b8e6; }
-  .icon-ref-table{ width:100%; border-collapse:collapse; }
-  .icon-ref-table th, .icon-ref-table td{ text-align:left; padding:5px 8px; border-bottom:1px solid rgba(255,255,255,0.06); }
-  .icon-ref-table th{ color:var(--gold); font-family:'Cinzel',serif; font-weight:700; font-size:11px; text-transform:uppercase; }
-  .icon-ref-table td{ color:#d9c9ef; }
-  .icon-ref-table code{ color:var(--gold-bright); background:rgba(0,0,0,0.3); padding:1px 6px; border-radius:5px; }
-  .icon-ref-table tr.missing td{ color:#ffb199; }
+    .trade-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 6px 10px;
+      font-size: 12.5px;
+    }
 
-  footer{ text-align:center; margin-top:30px; font-size:11.5px; color:#8a9a8e; line-height:1.6; }
-  footer a{ color:var(--gold); text-decoration:none; }
+    .trade-item img,
+    .trade-item .ph {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
 
-  @media (max-width:900px){
-    .compare-grid{ grid-template-columns:1fr; }
-    .trade-cols{ grid-template-columns:1fr; }
-  }
-  @media (max-width:480px){
-    .name-tag{ display:none; }
-    .grid{ grid-template-columns:repeat(auto-fill, minmax(62px, 1fr)); }
-  }
-  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
-</style>
+    .trade-item .ph {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #4a4436;
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      font-size: 10px;
+    }
+
+    .trade-item .amt {
+      margin-left: auto;
+      font-weight: 800;
+      color: var(--gold-bright);
+      white-space: nowrap;
+    }
+
+    .trade-empty {
+      font-size: 12.5px;
+      color: #8a9a8e;
+      font-style: italic;
+    }
+
+    .swap-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      background: linear-gradient(90deg, rgba(57, 194, 194, 0.10), rgba(224, 86, 143, 0.10));
+      border: 1px solid rgba(240, 178, 60, 0.35);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12.5px;
+    }
+
+    .swap-item .side {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .swap-item img,
+    .swap-item .ph {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .swap-item .ph {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #4a4436;
+      font-family: 'Cinzel', serif;
+      font-weight: 800;
+      font-size: 10px;
+    }
+
+    .swap-arrow {
+      color: var(--gold);
+      font-weight: 900;
+      font-size: 16px;
+    }
+
+    /* ---------- Two-column compare grid ---------- */
+    .compare-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .account-col {
+      min-width: 0;
+    }
+
+    .account-head {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(0, 0, 0, 0.28);
+      border: 2px solid var(--slot-empty);
+      border-radius: 14px;
+      padding: 12px 16px;
+      margin-bottom: 16px;
+    }
+
+    .account-col.acc-a .account-head {
+      border-color: var(--acc-a);
+    }
+
+    .account-col.acc-b .account-head {
+      border-color: var(--acc-b);
+    }
+
+    .account-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-weight: 900;
+      font-size: 16px;
+      color: #1c1224;
+    }
+
+    .account-col.acc-a .account-avatar {
+      background: linear-gradient(160deg, var(--acc-a-2), var(--acc-a));
+    }
+
+    .account-col.acc-b .account-avatar {
+      background: linear-gradient(160deg, var(--acc-b-2), var(--acc-b));
+    }
+
+    .account-name-input {
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 16px;
+      background: transparent;
+      border: none;
+      border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+      color: #f2e6c8;
+      padding: 2px 2px 3px;
+      width: 100%;
+      max-width: 220px;
+    }
+
+    .account-col.acc-a .account-name-input {
+      color: var(--acc-a-2);
+    }
+
+    .account-col.acc-b .account-name-input {
+      color: var(--acc-b-2);
+    }
+
+    .account-name-input:focus {
+      outline: none;
+      border-bottom-color: var(--gold);
+    }
+
+    .account-total {
+      margin-left: auto;
+      text-align: right;
+      font-family: 'Cinzel', serif;
+      color: var(--gold-bright);
+      font-size: 15px;
+      white-space: nowrap;
+    }
+
+    .account-total .lbl {
+      display: block;
+      font-family: 'Nunito', sans-serif;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: .5px;
+      color: #c9b8e6;
+    }
+
+    /* ---------- Group ---------- */
+    .group {
+      margin-top: 14px;
+      border-radius: 14px;
+      padding: 12px 12px 14px;
+      background: rgba(0, 0, 0, 0.18);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .group-head {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .group-badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 11px;
+      color: #1c1224;
+      flex-shrink: 0;
+    }
+
+    .group-title {
+      font-family: 'Cinzel', serif;
+      font-size: 13.5px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .group-counter {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Cinzel', serif;
+      font-size: 12.5px;
+      color: var(--gold-bright);
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 999px;
+      padding: 3px 11px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .group-track {
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.35);
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+
+    .group-fill {
+      height: 100%;
+      width: 0%;
+      transition: width .35s ease;
+    }
+
+    .group.elixir .group-badge {
+      background: linear-gradient(160deg, var(--c-elixir-2), var(--c-elixir));
+    }
+
+    .group.elixir .group-title {
+      color: var(--c-elixir-2);
+    }
+
+    .group.elixir .group-fill {
+      background: linear-gradient(90deg, var(--c-elixir-2), var(--c-elixir));
+    }
+
+    .group.dark .group-badge {
+      background: linear-gradient(160deg, var(--c-dark-2), var(--c-dark));
+    }
+
+    .group.dark .group-title {
+      color: var(--c-dark-2);
+    }
+
+    .group.dark .group-fill {
+      background: linear-gradient(90deg, var(--c-dark-2), var(--c-dark));
+    }
+
+    .group.builder .group-badge {
+      background: linear-gradient(160deg, var(--c-builder-2), var(--c-builder));
+    }
+
+    .group.builder .group-title {
+      color: var(--c-builder-2);
+    }
+
+    .group.builder .group-fill {
+      background: linear-gradient(90deg, var(--c-builder-2), var(--c-builder));
+    }
+
+    .group.super .group-badge {
+      background: linear-gradient(160deg, var(--c-super-2), var(--c-super));
+    }
+
+    .group.super .group-title {
+      color: var(--c-super-2);
+    }
+
+    .group.super .group-fill {
+      background: linear-gradient(90deg, var(--c-super-2), var(--c-super));
+    }
+
+    /* ---------- Cards ---------- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(68px, 1fr));
+      gap: 8px;
+    }
+
+    .card {
+      position: relative;
+      aspect-ratio: 1/1;
+      border-radius: 11px;
+      cursor: pointer;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      border: 2px solid var(--slot-empty);
+      background: linear-gradient(180deg, #3a3327, #221d15);
+      overflow: hidden;
+      transition: transform .12s ease, border-color .2s ease, box-shadow .2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .card:hover {
+      transform: translateY(-2px);
+    }
+
+    .card:active {
+      transform: translateY(-1px) scale(0.96);
+    }
+
+    .card:focus-visible {
+      outline: 2px solid var(--gold-bright);
+      outline-offset: 2px;
+    }
+
+    .card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: grayscale(1) brightness(0.55) contrast(0.9);
+      transition: filter .25s ease;
+      display: block;
+    }
+
+    .icon-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Cinzel', serif;
+      font-weight: 900;
+      font-size: 20px;
+      color: #fff;
+      background: linear-gradient(150deg, #6b6255, #332d24);
+      filter: grayscale(1) brightness(0.55);
+      transition: filter .25s ease;
+    }
+
+    .card.owned img,
+    .card.owned .icon-placeholder {
+      filter: none;
+    }
+
+    .card.owned {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 1px rgba(240, 178, 60, 0.5), 0 4px 12px rgba(0, 0, 0, 0.45);
+    }
+
+    .card.owned::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      box-shadow: inset 0 0 18px rgba(240, 178, 60, 0.35);
+      pointer-events: none;
+    }
+
+    .card.needed-highlight {
+      border-color: var(--ember);
+    }
+
+    .card.needed-highlight::before {
+      content: "?";
+      position: absolute;
+      bottom: 3px;
+      left: 3px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--ember);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
+      z-index: 2;
+    }
+
+    .card .name-tag {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 3px 4px 2px;
+      font-size: 8.5px;
+      font-weight: 800;
+      text-align: center;
+      line-height: 1.1;
+      color: #fff;
+      background: linear-gradient(0deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0));
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+    }
+
+    .card:not(.owned) .name-tag {
+      color: #bcb6a8;
+    }
+
+    .new-flag {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      font-size: 6.5px;
+      font-weight: 800;
+      background: var(--ember);
+      color: #fff;
+      padding: 1.5px 4px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .count-badge {
+      position: absolute;
+      top: 3px;
+      right: 3px;
+      min-width: 19px;
+      height: 19px;
+      padding: 0 4px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--gold-bright), var(--ember));
+      border: 1.5px solid #3a1f0b;
+      color: #2b1200;
+      font-weight: 800;
+      font-size: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    .count-badge.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    /* ---------- Icon path reference ---------- */
+    .icon-ref {
+      margin-top: 26px;
+    }
+
+    .icon-ref summary {
+      cursor: pointer;
+      font-family: 'Cinzel', serif;
+      font-size: 14px;
+      color: var(--gold);
+      padding: 10px 16px;
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(240, 178, 60, 0.3);
+      border-radius: 10px;
+    }
+
+    .icon-ref[open] summary {
+      border-radius: 10px 10px 0 0;
+    }
+
+    .icon-ref-body {
+      background: rgba(0, 0, 0, 0.18);
+      border: 1px solid rgba(240, 178, 60, 0.2);
+      border-top: none;
+      border-radius: 0 0 10px 10px;
+      padding: 14px 16px;
+      font-size: 12.5px;
+    }
+
+    .icon-ref-body p {
+      margin: 0 0 10px;
+      color: #c9b8e6;
+    }
+
+    .icon-ref-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .icon-ref-table th,
+    .icon-ref-table td {
+      text-align: left;
+      padding: 5px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .icon-ref-table th {
+      color: var(--gold);
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+
+    .icon-ref-table td {
+      color: #d9c9ef;
+    }
+
+    .icon-ref-table code {
+      color: var(--gold-bright);
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1px 6px;
+      border-radius: 5px;
+    }
+
+    .icon-ref-table tr.missing td {
+      color: #ffb199;
+    }
+
+    footer {
+      text-align: center;
+      margin-top: 30px;
+      font-size: 11.5px;
+      color: #8a9a8e;
+      line-height: 1.6;
+    }
+
+    footer a {
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    @media (max-width:900px) {
+      .compare-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .trade-cols {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width:480px) {
+      .name-tag {
+        display: none;
+      }
+
+      .grid {
+        grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<div class="wrap">
+  <div class="wrap">
 
-  <div class="banner">
-    <h1>Thẻ Bài Clash — So Sánh 2 Nick</h1>
-    <p class="subtitle">Bấm vào thẻ để tăng số lượng (0 → x1 → x2 → x3 → quay lại 0). Dữ liệu được lưu tự động vào bộ nhớ trình duyệt (localStorage) trên máy này. Bên dưới là gợi ý trao đổi thẻ dư giữa 2 nick.</p>
-    <div class="toolbar">
-      <button class="btn" id="btnReset">↺ Đặt lại toàn bộ về 0</button>
+    <div class="banner">
+      <h1>Thẻ Bài Clash — So Sánh 2 Nick</h1>
+      <p class="subtitle">Bấm vào thẻ để tăng số lượng (0 → x1 → x2 → x3 → quay lại 0). Dữ liệu được lưu tự động vào bộ
+        nhớ trình duyệt (localStorage) trên máy này. Bên dưới là gợi ý trao đổi thẻ dư giữa 2 nick.</p>
+      <div class="toolbar">
+        <button class="btn" id="btnReset">↺ Đặt lại toàn bộ về 0</button>
+      </div>
+      <div class="legend">
+        <span><i class="swatch g"></i>Chưa có (0)</span>
+        <span><i class="swatch c"></i>Đã có (x1)</span>
+        <span><i class="swatch x"></i>Có nhiều (x2 / x3)</span>
+        <span>🔺 = thẻ nick kia đang thiếu, gợi ý đem đổi</span>
+      </div>
     </div>
-    <div class="legend">
-      <span><i class="swatch g"></i>Chưa có (0)</span>
-      <span><i class="swatch c"></i>Đã có (x1)</span>
-      <span><i class="swatch x"></i>Có nhiều (x2 / x3)</span>
-      <span>🔺 = thẻ nick kia đang thiếu, gợi ý đem đổi</span>
+
+    <div class="trade-panel">
+      <h2>🔁 Gợi ý trao đổi thẻ</h2>
+      <p class="trade-desc">Thẻ nào một nick có &gt; 1 (dư) mà nick còn lại đang có 0 (chưa có) sẽ được gợi ý ở đây.</p>
+      <div class="trade-cols">
+        <div class="trade-block swap trade-swap-col">
+          <h3>⇄ Có thể đổi 1:1 ngay</h3>
+          <ul class="trade-list" id="tradeSwapList"></ul>
+        </div>
+        <div class="trade-block a">
+          <h3 id="tradeAHeading">A dư, B đang thiếu</h3>
+          <ul class="trade-list" id="tradeAList"></ul>
+        </div>
+        <div class="trade-block b">
+          <h3 id="tradeBHeading">B dư, A đang thiếu</h3>
+          <ul class="trade-list" id="tradeBList"></ul>
+        </div>
+      </div>
     </div>
+
+    <div class="compare-grid">
+      <div class="account-col acc-a" id="col-A">
+        <div class="account-head">
+          <div class="account-avatar">A</div>
+          <input class="account-name-input" id="nameInput-A" maxlength="24" />
+          <div class="account-total"><span class="lbl">Đã có</span><span id="total-A">0 / 0</span></div>
+        </div>
+        <div id="groups-A"></div>
+      </div>
+      <div class="account-col acc-b" id="col-B">
+        <div class="account-head">
+          <div class="account-avatar">B</div>
+          <input class="account-name-input" id="nameInput-B" maxlength="24" />
+          <div class="account-total"><span class="lbl">Đã có</span><span id="total-B">0 / 0</span></div>
+        </div>
+        <div id="groups-B"></div>
+      </div>
+    </div>
+
+    <details class="icon-ref">
+      <summary>🖼️ Danh sách đường dẫn icon card (sửa trong source code tại biến ICON_BASE / TROOP_GROUPS)</summary>
+      <div class="icon-ref-body">
+        <p>Icon được nạp từ thư mục cục bộ <code id="iconBaseShown"></code>. Ví dụ: icon Lava Hound có đường dẫn
+          <code>./img/airdefenceseeker.png</code>. Đặt các file ảnh cùng tên vào thư mục <code>img/</code> cạnh file
+          HTML này. Thẻ nào chưa có file (cột "Trạng thái" ghi "Chưa có icon") sẽ hiển thị chữ viết tắt tạm thời.</p>
+        <table class="icon-ref-table" id="iconRefTable">
+          <thead>
+            <tr>
+              <th>Nhóm</th>
+              <th>Tên thẻ</th>
+              <th>Đường dẫn icon</th>
+              <th>Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </details>
+
+    <footer>Icon lính có thể lấy tham khảo từ <a href="https://coc.guide/troop" target="_blank"
+        rel="noopener">coc.guide</a> rồi tải về thư mục <code>img/</code> cục bộ · Công cụ theo dõi &amp; trao đổi bộ
+      sưu tập, không liên kết chính thức với Supercell.</footer>
   </div>
 
-  <div class="trade-panel">
-    <h2>🔁 Gợi ý trao đổi thẻ</h2>
-    <p class="trade-desc">Thẻ nào một nick có &gt; 1 (dư) mà nick còn lại đang có 0 (chưa có) sẽ được gợi ý ở đây.</p>
-    <div class="trade-cols">
-      <div class="trade-block swap trade-swap-col">
-        <h3>⇄ Có thể đổi 1:1 ngay</h3>
-        <ul class="trade-list" id="tradeSwapList"></ul>
-      </div>
-      <div class="trade-block a">
-        <h3 id="tradeAHeading">A dư, B đang thiếu</h3>
-        <ul class="trade-list" id="tradeAList"></ul>
-      </div>
-      <div class="trade-block b">
-        <h3 id="tradeBHeading">B dư, A đang thiếu</h3>
-        <ul class="trade-list" id="tradeBList"></ul>
-      </div>
-    </div>
-  </div>
+  <script>
+    /* =========================================================================
+       DANH SÁCH ĐƯỜNG DẪN ICON — sửa trực tiếp ở đây nếu muốn đổi ảnh.
+       Mỗi mục: [Tên hiển thị, tên file ảnh trong thư mục ICON_BASE]
+       -> null nghĩa là chưa có icon, trang sẽ hiển thị chữ viết tắt thay thế.
+       Ví dụ: Lava Hound -> "airdefenceseeker.png"
+              => đường dẫn đầy đủ: ICON_BASE + "airdefenceseeker.png"
+                                  = "./img/airdefenceseeker.png"
+       ========================================================================= */
+    const ICON_BASE = "./img/";
 
-  <div class="compare-grid">
-    <div class="account-col acc-a" id="col-A">
-      <div class="account-head">
-        <div class="account-avatar">A</div>
-        <input class="account-name-input" id="nameInput-A" maxlength="24" />
-        <div class="account-total"><span class="lbl">Đã có</span><span id="total-A">0 / 0</span></div>
-      </div>
-      <div id="groups-A"></div>
-    </div>
-    <div class="account-col acc-b" id="col-B">
-      <div class="account-head">
-        <div class="account-avatar">B</div>
-        <input class="account-name-input" id="nameInput-B" maxlength="24" />
-        <div class="account-total"><span class="lbl">Đã có</span><span id="total-B">0 / 0</span></div>
-      </div>
-      <div id="groups-B"></div>
-    </div>
-  </div>
+    const TROOP_GROUPS = [
+      {
+        key: "elixir",
+        title: "Elixir Cards",
+        desc: "Lính Elixir thường",
+        troops: [
+          ["Barbarian", "barbarian.png"],
+          ["Archer", "archer.png"],
+          ["Giant", "giant.png"],
+          ["Goblin", "goblin.png"],
+          ["Wall Breaker", "wall-breaker.png"],
+          ["Balloon", "balloon.png"],
+          ["Wizard", "wizard.png"],
+          ["Healer", "healer.png"],
+          ["Dragon", "dragon.png"],
+          ["P.E.K.K.A", "pekka.png"],
+          ["Baby Dragon", "babydragon.png"],
+          ["Miner", "miner.png"],
+          ["Electro Dragon", "electro-dragon.png"],
+          ["Yeti", "yeti.png"],
+          ["Dragon Rider", "dragon-rider.png"],
+          ["Electro Titan", "electro-titan.png"],
+          ["Root Rider", "root-rider.png"],
+          ["Thrower", "thrower.png"],
+          ["Meteor Golem", "Meteor_Golem.png"],
+        ]
+      },
+      {
+        key: "dark",
+        title: "Dark Elixir Cards",
+        desc: "Lính Hắc Tiên Dược",
+        troops: [
+          ["Minion", "gargoyle.png"],
+          ["Hog Rider", "boar-rider.png"],
+          ["Valkyrie", "warrior-girl.png"],
+          ["Golem", "golem.png"],
+          ["Witch", "warlock.png"],
+          ["Lava Hound", "airdefenceseeker.png"],
+          ["Bowler", "bowler.png"],
+          ["Ice Golem", "ice-golem.png"],
+          ["Headhunter", "headhunter.png"],
+          ["Apprentice Warden", "apprentice-warden.png"],
+          ["Druid", "druid_healer.png"],
+          ["Furnace", "Avatar_Furnace.png"],
+          ["Ruin Witch", "Ruin_Witch.png"],
+        ]
+      },
+      {
+        key: "builder",
+        title: "Builder Base Cards",
+        desc: "Lính Làng Thợ Xây",
+        troops: [
+          ["Raged Barbarian", "barbarian2.png"],
+          ["Sneaky Archer", "archer2.png"],
+          ["Boxer Giant", "giant2.png"],
+          ["Beta Minion", "gargoyle2.png"],
+          ["Bomber", "bomber2.png"],
+          ["Baby Dragon", "babydragon.png"],
+          ["Cannon Cart", "moving-cannon.png"],
+          ["Night Witch", "dark-witch.png"],
+          ["Drop Ship", "balloon2.png"],
+          ["Power P.E.K.K.A", "pekka2.png"],
+          ["Hog Glider", "hog-glider.png"],
+        ]
+      },
+      {
+        key: "super",
+        title: "Super Troop Cards",
+        desc: "Lính Siêu Binh Lính",
+        troops: [
+          ["Super Barbarian", "elitebarbarian.png"],
+          ["Super Archer", "elitearcher.png"],
+          ["Super Giant", "elitegiant.png"],
+          ["Sneaky Goblin", "elitegoblin.png"],
+          ["Super Wall Breaker", "elitewallbreaker.png"],
+          ["Rocket Balloon", "hastyballoon.png"],
+          ["Super Wizard", "super-wizard.png"],
+          ["Super Dragon", "super-dragon.png"],
+          ["Inferno Dragon", "infernodragon.png"],
+          ["Super Miner", "super-miner.png"],
+          ["Super Yeti", "Super_Yeti.png"],
+          ["Super Minion", "super-minion.png"],
+          ["Super Hog Rider", "super-hog-rider.png"],
+          ["Super Valkyrie", "elitevalkyrie.png"],
+          ["Super Witch", "head-witch.png"],
+          ["Ice Hound", "ice-hound.png"],
+          ["Super Bowler", "super-bowler.png"],
+        ]
+      },
+    ];
+    /* ===================== HẾT PHẦN DANH SÁCH ICON ===================== */
 
-  <details class="icon-ref">
-    <summary>🖼️ Danh sách đường dẫn icon card (sửa trong source code tại biến ICON_BASE / TROOP_GROUPS)</summary>
-    <div class="icon-ref-body">
-      <p>Icon được nạp từ thư mục cục bộ <code id="iconBaseShown"></code>. Ví dụ: icon Lava Hound có đường dẫn <code>./img/airdefenceseeker.png</code>. Đặt các file ảnh cùng tên vào thư mục <code>img/</code> cạnh file HTML này. Thẻ nào chưa có file (cột "Trạng thái" ghi "Chưa có icon") sẽ hiển thị chữ viết tắt tạm thời.</p>
-      <table class="icon-ref-table" id="iconRefTable">
-        <thead><tr><th>Nhóm</th><th>Tên thẻ</th><th>Đường dẫn icon</th><th>Trạng thái</th></tr></thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </details>
+    const STORAGE_KEY = "clashCardsCompareV1";
+    const ACCOUNTS = ["A", "B"];
 
-  <footer>Icon lính có thể lấy tham khảo từ <a href="https://coc.guide/troop" target="_blank" rel="noopener">coc.guide</a> rồi tải về thư mục <code>img/</code> cục bộ · Công cụ theo dõi &amp; trao đổi bộ sưu tập, không liên kết chính thức với Supercell.</footer>
-</div>
-
-<script>
-/* =========================================================================
-   DANH SÁCH ĐƯỜNG DẪN ICON — sửa trực tiếp ở đây nếu muốn đổi ảnh.
-   Mỗi mục: [Tên hiển thị, tên file ảnh trong thư mục ICON_BASE]
-   -> null nghĩa là chưa có icon, trang sẽ hiển thị chữ viết tắt thay thế.
-   Ví dụ: Lava Hound -> "airdefenceseeker.png"
-          => đường dẫn đầy đủ: ICON_BASE + "airdefenceseeker.png"
-                              = "./img/airdefenceseeker.png"
-   ========================================================================= */
-const ICON_BASE = "./img/";
-
-const TROOP_GROUPS = [
-  {
-    key: "elixir",
-    title: "Elixir Cards",
-    desc: "Lính Elixir thường",
-    troops: [
-      ["Barbarian","barbarian.png"],
-      ["Archer","archer.png"],
-      ["Giant","giant.png"],
-      ["Goblin","goblin.png"],
-      ["Wall Breaker","wall-breaker.png"],
-      ["Balloon","balloon.png"],
-      ["Wizard","wizard.png"],
-      ["Healer","healer.png"],
-      ["Dragon","dragon.png"],
-      ["P.E.K.K.A","pekka.png"],
-      ["Baby Dragon","babydragon.png"],
-      ["Miner","miner.png"],
-      ["Electro Dragon","electro-dragon.png"],
-      ["Yeti","yeti.png"],
-      ["Dragon Rider","dragon-rider.png"],
-      ["Electro Titan","electro-titan.png"],
-      ["Root Rider","root-rider.png"],
-      ["Thrower","thrower.png"],
-      ["Meteor Golem", "Meteor_Golem.png"],
-    ]
-  },
-  {
-    key: "dark",
-    title: "Dark Elixir Cards",
-    desc: "Lính Hắc Tiên Dược",
-    troops: [
-      ["Minion","gargoyle.png"],
-      ["Hog Rider","boar-rider.png"],
-      ["Valkyrie","warrior-girl.png"],
-      ["Golem","golem.png"],
-      ["Witch","warlock.png"],
-      ["Lava Hound","airdefenceseeker.png"],
-      ["Bowler","bowler.png"],
-      ["Ice Golem","ice-golem.png"],
-      ["Headhunter","headhunter.png"],
-      ["Apprentice Warden","apprentice-warden.png"],
-      ["Druid","druid_healer.png"],
-      ["Furnace", "Avatar_Furnace.png"],
-      ["Ruin Witch", "Ruin_Witch.png"],
-    ]
-  },
-  {
-    key: "builder",
-    title: "Builder Base Cards",
-    desc: "Lính Làng Thợ Xây",
-    troops: [
-      ["Raged Barbarian","barbarian2.png"],
-      ["Sneaky Archer","archer2.png"],
-      ["Boxer Giant","giant2.png"],
-      ["Beta Minion","gargoyle2.png"],
-      ["Bomber","bomber2.png"],
-      ["Baby Dragon","babydragon.png"],
-      ["Cannon Cart","moving-cannon.png"],
-      ["Night Witch","dark-witch.png"],
-      ["Drop Ship","balloon2.png"],
-      ["Power P.E.K.K.A","pekka2.png"],
-      ["Hog Glider","hog-glider.png"],
-    ]
-  },
-  {
-    key: "super",
-    title: "Super Troop Cards",
-    desc: "Lính Siêu Binh Lính",
-    troops: [
-      ["Super Barbarian","elitebarbarian.png"],
-      ["Super Archer","elitearcher.png"],
-      ["Super Giant","elitegiant.png"],
-      ["Sneaky Goblin","elitegoblin.png"],
-      ["Super Wall Breaker","elitewallbreaker.png"],
-      ["Rocket Balloon","hastyballoon.png"],
-      ["Super Wizard","super-wizard.png"],
-      ["Super Dragon","super-dragon.png"],
-      ["Inferno Dragon","infernodragon.png"],
-      ["Super Miner","super-miner.png"],
-      ["Super Yeti", "Super_Yeti.png"],
-      ["Super Minion","super-minion.png"],
-      ["Super Hog Rider","super-hog-rider.png"],
-      ["Super Valkyrie","elitevalkyrie.png"],
-      ["Super Witch","head-witch.png"],
-      ["Ice Hound","ice-hound.png"],
-      ["Super Bowler","super-bowler.png"],
-    ]
-  },
-];
-/* ===================== HẾT PHẦN DANH SÁCH ICON ===================== */
-
-const STORAGE_KEY = "clashCardsCompareV1";
-const ACCOUNTS = ["A","B"];
-
-function initials(name){
-  return name.replace(/[^A-Za-z0-9 ]/g, "").split(" ").filter(Boolean).slice(0,2).map(w => w[0]).join("").toUpperCase();
-}
-function makeKey(groupKey, name){ return groupKey + "::" + name; }
-
-// Build flat list of all card keys in display order, keep ref to name/file/group
-const ALL_CARDS = [];
-TROOP_GROUPS.forEach(g => g.troops.forEach(([name, file]) => {
-  ALL_CARDS.push({ key: makeKey(g.key, name), name, file, groupKey: g.key, groupTitle: g.title });
-}));
-
-/* ---------------- State (load / save via localStorage) ---------------- */
-function defaultState(){
-  const counts = {};
-  ACCOUNTS.forEach(acc => {
-    counts[acc] = {};
-    ALL_CARDS.forEach(c => counts[acc][c.key] = 0);
-  });
-  return {
-    names: { A: "Người chơi A", B: "Người chơi B" },
-    counts
-  };
-}
-
-function loadState(){
-  let saved = null;
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) saved = JSON.parse(raw);
-  } catch(e){ console.warn("Không đọc được localStorage:", e); }
-
-  const state = defaultState();
-  if (saved){
-    if (saved.names){
-      ACCOUNTS.forEach(acc => { if (typeof saved.names[acc] === "string" && saved.names[acc].trim()) state.names[acc] = saved.names[acc]; });
+    function initials(name) {
+      return name.replace(/[^A-Za-z0-9 ]/g, "").split(" ").filter(Boolean).slice(0, 2).map(w => w[0]).join("").toUpperCase();
     }
-    if (saved.counts){
+    function makeKey(groupKey, name) { return groupKey + "::" + name; }
+
+    // Build flat list of all card keys in display order, keep ref to name/file/group
+    const ALL_CARDS = [];
+    TROOP_GROUPS.forEach(g => g.troops.forEach(([name, file]) => {
+      ALL_CARDS.push({ key: makeKey(g.key, name), name, file, groupKey: g.key, groupTitle: g.title });
+    }));
+
+    /* ---------------- State (load / save via localStorage) ---------------- */
+    function defaultState() {
+      const counts = {};
       ACCOUNTS.forEach(acc => {
-        const savedAcc = saved.counts[acc] || {};
-        ALL_CARDS.forEach(c => {
-          const v = savedAcc[c.key];
-          if (typeof v === "number" && v >= 0 && v <= 3) state.counts[acc][c.key] = v;
-        });
+        counts[acc] = {};
+        ALL_CARDS.forEach(c => counts[acc][c.key] = 0);
       });
+      return {
+        names: { A: "Người chơi A", B: "Người chơi B" },
+        counts
+      };
     }
-  }
-  return state;
-}
 
-function saveState(){
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
-  catch(e){ console.warn("Không lưu được localStorage:", e); }
-}
+    function loadState() {
+      let saved = null;
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) saved = JSON.parse(raw);
+      } catch (e) { console.warn("Không đọc được localStorage:", e); }
 
-let state = loadState();
+      const state = defaultState();
+      if (saved) {
+        if (saved.names) {
+          ACCOUNTS.forEach(acc => { if (typeof saved.names[acc] === "string" && saved.names[acc].trim()) state.names[acc] = saved.names[acc]; });
+        }
+        if (saved.counts) {
+          ACCOUNTS.forEach(acc => {
+            const savedAcc = saved.counts[acc] || {};
+            ALL_CARDS.forEach(c => {
+              const v = savedAcc[c.key];
+              if (typeof v === "number" && v >= 0 && v <= 3) state.counts[acc][c.key] = v;
+            });
+          });
+        }
+      }
+      return state;
+    }
 
-/* ---------------- Build UI per account ---------------- */
-const cardRefs = { A: {}, B: {} }; // key -> {card, badge}
+    function saveState() {
+      try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+      catch (e) { console.warn("Không lưu được localStorage:", e); }
+    }
 
-function buildAccountColumn(acc){
-  document.getElementById("nameInput-" + acc).value = state.names[acc];
-  const container = document.getElementById("groups-" + acc);
-  container.innerHTML = "";
+    let state = loadState();
 
-  TROOP_GROUPS.forEach(group => {
-    const section = document.createElement("section");
-    section.className = "group " + group.key;
-    section.dataset.group = group.key;
+    /* ---------------- Build UI per account ---------------- */
+    const cardRefs = { A: {}, B: {} }; // key -> {card, badge}
 
-    section.innerHTML = `
+    function buildAccountColumn(acc) {
+      document.getElementById("nameInput-" + acc).value = state.names[acc];
+      const container = document.getElementById("groups-" + acc);
+      container.innerHTML = "";
+
+      TROOP_GROUPS.forEach(group => {
+        const section = document.createElement("section");
+        section.className = "group " + group.key;
+        section.dataset.group = group.key;
+
+        section.innerHTML = `
       <div class="group-head">
-        <div class="group-badge">${group.title.split(" ").map(w=>w[0]).slice(0,2).join("")}</div>
+        <div class="group-badge">${group.title.split(" ").map(w => w[0]).slice(0, 2).join("")}</div>
         <div>
           <h2 class="group-title">${group.title}</h2>
         </div>
@@ -542,203 +1069,204 @@ function buildAccountColumn(acc){
       <div class="group-track"><div class="group-fill"></div></div>
       <div class="grid"></div>
     `;
-    const grid = section.querySelector(".grid");
+        const grid = section.querySelector(".grid");
 
-    group.troops.forEach(([name, file]) => {
-      const key = makeKey(group.key, name);
+        group.troops.forEach(([name, file]) => {
+          const key = makeKey(group.key, name);
 
-      const card = document.createElement("button");
-      card.type = "button";
-      card.className = "card";
-      card.dataset.key = key;
-      card.dataset.account = acc;
+          const card = document.createElement("button");
+          card.type = "button";
+          card.className = "card";
+          card.dataset.key = key;
+          card.dataset.account = acc;
 
-      let iconEl;
-      if (file){
-        iconEl = document.createElement("img");
-        iconEl.src = ICON_BASE + file;
-        iconEl.alt = name;
-        iconEl.loading = "lazy";
+          let iconEl;
+          if (file) {
+            iconEl = document.createElement("img");
+            iconEl.src = ICON_BASE + file;
+            iconEl.alt = name;
+            iconEl.loading = "lazy";
+          } else {
+            iconEl = document.createElement("div");
+            iconEl.className = "icon-placeholder";
+            iconEl.textContent = initials(name);
+            const flag = document.createElement("div");
+            flag.className = "new-flag";
+            flag.textContent = "Mới";
+            card.appendChild(flag);
+          }
+
+          const tag = document.createElement("div");
+          tag.className = "name-tag";
+          tag.textContent = name;
+
+          const badge = document.createElement("div");
+          badge.className = "count-badge";
+          badge.textContent = "x1";
+
+          card.appendChild(iconEl);
+          card.appendChild(badge);
+          card.appendChild(tag);
+
+          card.addEventListener("click", () => {
+            state.counts[acc][key] = (state.counts[acc][key] + 1) % 4;
+            saveState();
+            renderCardVisual(acc, key);
+            updateAccountProgress(acc);
+            renderTradeSuggestions();
+          });
+
+          cardRefs[acc][key] = { card, badge };
+          grid.appendChild(card);
+        });
+
+        container.appendChild(section);
+      });
+    }
+
+    function renderCardVisual(acc, key) {
+      const { card, badge } = cardRefs[acc][key];
+      const count = state.counts[acc][key];
+      const owned = count > 0;
+      const cardInfo = ALL_CARDS.find(c => c.key === key);
+
+      card.classList.toggle("owned", owned);
+      card.setAttribute("aria-label", cardInfo.name + (owned ? `, đang có x${count}` : ", chưa sở hữu") + ". Bấm để tăng số lượng.");
+
+      if (count > 1) {
+        badge.textContent = "x" + count;
+        badge.classList.add("show");
       } else {
-        iconEl = document.createElement("div");
-        iconEl.className = "icon-placeholder";
-        iconEl.textContent = initials(name);
-        const flag = document.createElement("div");
-        flag.className = "new-flag";
-        flag.textContent = "Mới";
-        card.appendChild(flag);
+        badge.classList.remove("show");
       }
 
-      const tag = document.createElement("div");
-      tag.className = "name-tag";
-      tag.textContent = name;
+      // highlight if THIS card is something the other account needs (i.e. this account has surplus)
+      const otherAcc = acc === "A" ? "B" : "A";
+      const otherHas = state.counts[otherAcc][key];
+      card.classList.toggle("needed-highlight", count > 1 && otherHas === 0);
+    }
 
-      const badge = document.createElement("div");
-      badge.className = "count-badge";
-      badge.textContent = "x1";
+    function renderAllCardsVisual() {
+      ACCOUNTS.forEach(acc => ALL_CARDS.forEach(c => renderCardVisual(acc, c.key)));
+    }
 
-      card.appendChild(iconEl);
-      card.appendChild(badge);
-      card.appendChild(tag);
+    function updateAccountProgress(acc) {
+      const allKeys = ALL_CARDS.map(c => c.key);
+      const owned = allKeys.filter(k => state.counts[acc][k] > 0).length;
+      document.getElementById("total-" + acc).textContent = owned + " / " + allKeys.length;
 
-      card.addEventListener("click", () => {
-        state.counts[acc][key] = (state.counts[acc][key] + 1) % 4;
-        saveState();
-        renderCardVisual(acc, key);
-        updateAccountProgress(acc);
-        renderTradeSuggestions();
+      document.querySelectorAll("#groups-" + acc + " .group").forEach(section => {
+        const gKey = section.dataset.group;
+        const keys = ALL_CARDS.filter(c => c.groupKey === gKey).map(c => c.key);
+        const ownedG = keys.filter(k => state.counts[acc][k] > 0).length;
+        section.querySelector(".g-collected").textContent = ownedG;
+        section.querySelector(".g-total").textContent = keys.length;
+        section.querySelector(".group-fill").style.width = (ownedG / keys.length * 100).toFixed(1) + "%";
       });
+    }
 
-      cardRefs[acc][key] = { card, badge };
-      grid.appendChild(card);
-    });
+    function updateAllProgress() { ACCOUNTS.forEach(updateAccountProgress); }
 
-    container.appendChild(section);
-  });
-}
+    /* ---------------- Trade suggestions ---------------- */
+    function cardMiniHTML(c) {
+      const icon = c.file
+        ? `<img src="${ICON_BASE + c.file}" alt="${c.name}">`
+        : `<div class="ph">${initials(c.name)}</div>`;
+      return icon;
+    }
 
-function renderCardVisual(acc, key){
-  const { card, badge } = cardRefs[acc][key];
-  const count = state.counts[acc][key];
-  const owned = count > 0;
-  const cardInfo = ALL_CARDS.find(c => c.key === key);
+    function renderTradeSuggestions() {
+      const nameA = state.names.A || "Nick A";
+      const nameB = state.names.B || "Nick B";
+      document.getElementById("tradeAHeading").textContent = `${nameA} dư, ${nameB} đang thiếu`;
+      document.getElementById("tradeBHeading").textContent = `${nameB} dư, ${nameA} đang thiếu`;
 
-  card.classList.toggle("owned", owned);
-  card.setAttribute("aria-label", cardInfo.name + (owned ? `, đang có x${count}` : ", chưa sở hữu") + ". Bấm để tăng số lượng.");
+      const aSurplus = ALL_CARDS.filter(c => state.counts.A[c.key] > 1 && state.counts.B[c.key] === 0);
+      const bSurplus = ALL_CARDS.filter(c => state.counts.B[c.key] > 1 && state.counts.A[c.key] === 0);
 
-  if (count > 1){
-    badge.textContent = "x" + count;
-    badge.classList.add("show");
-  } else {
-    badge.classList.remove("show");
-  }
+      // 1:1 swap pairing (greedy, first-come)
+      const swapCount = Math.min(aSurplus.length, bSurplus.length);
+      const swapPairs = [];
+      for (let i = 0; i < swapCount; i++) swapPairs.push([aSurplus[i], bSurplus[i]]);
+      const aOnly = aSurplus.slice(swapCount);
+      const bOnly = bSurplus.slice(swapCount);
 
-  // highlight if THIS card is something the other account needs (i.e. this account has surplus)
-  const otherAcc = acc === "A" ? "B" : "A";
-  const otherHas = state.counts[otherAcc][key];
-  card.classList.toggle("needed-highlight", count > 1 && otherHas === 0);
-}
-
-function renderAllCardsVisual(){
-  ACCOUNTS.forEach(acc => ALL_CARDS.forEach(c => renderCardVisual(acc, c.key)));
-}
-
-function updateAccountProgress(acc){
-  const allKeys = ALL_CARDS.map(c => c.key);
-  const owned = allKeys.filter(k => state.counts[acc][k] > 0).length;
-  document.getElementById("total-" + acc).textContent = owned + " / " + allKeys.length;
-
-  document.querySelectorAll("#groups-" + acc + " .group").forEach(section => {
-    const gKey = section.dataset.group;
-    const keys = ALL_CARDS.filter(c => c.groupKey === gKey).map(c => c.key);
-    const ownedG = keys.filter(k => state.counts[acc][k] > 0).length;
-    section.querySelector(".g-collected").textContent = ownedG;
-    section.querySelector(".g-total").textContent = keys.length;
-    section.querySelector(".group-fill").style.width = (ownedG / keys.length * 100).toFixed(1) + "%";
-  });
-}
-
-function updateAllProgress(){ ACCOUNTS.forEach(updateAccountProgress); }
-
-/* ---------------- Trade suggestions ---------------- */
-function cardMiniHTML(c){
-  const icon = c.file
-    ? `<img src="${ICON_BASE + c.file}" alt="${c.name}">`
-    : `<div class="ph">${initials(c.name)}</div>`;
-  return icon;
-}
-
-function renderTradeSuggestions(){
-  const nameA = state.names.A || "Nick A";
-  const nameB = state.names.B || "Nick B";
-  document.getElementById("tradeAHeading").textContent = `${nameA} dư, ${nameB} đang thiếu`;
-  document.getElementById("tradeBHeading").textContent = `${nameB} dư, ${nameA} đang thiếu`;
-
-  const aSurplus = ALL_CARDS.filter(c => state.counts.A[c.key] > 1 && state.counts.B[c.key] === 0);
-  const bSurplus = ALL_CARDS.filter(c => state.counts.B[c.key] > 1 && state.counts.A[c.key] === 0);
-
-  // 1:1 swap pairing (greedy, first-come)
-  const swapCount = Math.min(aSurplus.length, bSurplus.length);
-  const swapPairs = [];
-  for (let i = 0; i < swapCount; i++) swapPairs.push([aSurplus[i], bSurplus[i]]);
-  const aOnly = aSurplus.slice(swapCount);
-  const bOnly = bSurplus.slice(swapCount);
-
-  const swapList = document.getElementById("tradeSwapList");
-  swapList.innerHTML = "";
-  if (swapPairs.length === 0){
-    swapList.innerHTML = `<li class="trade-empty">Chưa có cặp thẻ nào có thể đổi 1:1 ngay lúc này.</li>`;
-  } else {
-    swapPairs.forEach(([ca, cb]) => {
-      const li = document.createElement("li");
-      li.className = "swap-item";
-      li.innerHTML = `
+      const swapList = document.getElementById("tradeSwapList");
+      swapList.innerHTML = "";
+      if (swapPairs.length === 0) {
+        swapList.innerHTML = `<li class="trade-empty">Chưa có cặp thẻ nào có thể đổi 1:1 ngay lúc này.</li>`;
+      } else {
+        swapPairs.forEach(([ca, cb]) => {
+          const li = document.createElement("li");
+          li.className = "swap-item";
+          li.innerHTML = `
         <div class="side">${cardMiniHTML(ca)}<span><b>${nameA}</b> đưa <b>${ca.name}</b> (dư x${state.counts.A[ca.key]})</span></div>
         <span class="swap-arrow">⇄</span>
         <div class="side">${cardMiniHTML(cb)}<span><b>${nameB}</b> đưa <b>${cb.name}</b> (dư x${state.counts.B[cb.key]})</span></div>
       `;
-      swapList.appendChild(li);
-    });
-  }
+          swapList.appendChild(li);
+        });
+      }
 
-  const fillList = (listEl, cards, acc) => {
-    listEl.innerHTML = "";
-    if (cards.length === 0){
-      listEl.innerHTML = `<li class="trade-empty">Không có thẻ dư phù hợp.</li>`;
-      return;
+      const fillList = (listEl, cards, acc) => {
+        listEl.innerHTML = "";
+        if (cards.length === 0) {
+          listEl.innerHTML = `<li class="trade-empty">Không có thẻ dư phù hợp.</li>`;
+          return;
+        }
+        cards.forEach(c => {
+          const li = document.createElement("li");
+          li.className = "trade-item";
+          li.innerHTML = `${cardMiniHTML(c)}<span>${c.name}</span><span class="amt">dư x${state.counts[acc][c.key]}</span>`;
+          listEl.appendChild(li);
+        });
+      };
+      fillList(document.getElementById("tradeAList"), aOnly, "A");
+      fillList(document.getElementById("tradeBList"), bOnly, "B");
     }
-    cards.forEach(c => {
-      const li = document.createElement("li");
-      li.className = "trade-item";
-      li.innerHTML = `${cardMiniHTML(c)}<span>${c.name}</span><span class="amt">dư x${state.counts[acc][c.key]}</span>`;
-      listEl.appendChild(li);
+
+    /* ---------------- Icon reference table ---------------- */
+    function buildIconRefTable() {
+      document.getElementById("iconBaseShown").textContent = ICON_BASE;
+      const tbody = document.querySelector("#iconRefTable tbody");
+      tbody.innerHTML = "";
+      ALL_CARDS.forEach(c => {
+        const tr = document.createElement("tr");
+        if (!c.file) tr.className = "missing";
+        const path = c.file ? (ICON_BASE + c.file) : "—";
+        const status = c.file ? "OK" : "Chưa có icon";
+        tr.innerHTML = `<td>${c.groupTitle}</td><td>${c.name}</td><td><code>${path}</code></td><td>${status}</td>`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    /* ---------------- Name inputs ---------------- */
+    ACCOUNTS.forEach(acc => {
+      document.getElementById("nameInput-" + acc).addEventListener("input", (e) => {
+        state.names[acc] = e.target.value;
+        saveState();
+        renderTradeSuggestions();
+      });
     });
-  };
-  fillList(document.getElementById("tradeAList"), aOnly, "A");
-  fillList(document.getElementById("tradeBList"), bOnly, "B");
-}
 
-/* ---------------- Icon reference table ---------------- */
-function buildIconRefTable(){
-  document.getElementById("iconBaseShown").textContent = ICON_BASE;
-  const tbody = document.querySelector("#iconRefTable tbody");
-  tbody.innerHTML = "";
-  ALL_CARDS.forEach(c => {
-    const tr = document.createElement("tr");
-    if (!c.file) tr.className = "missing";
-    const path = c.file ? (ICON_BASE + c.file) : "—";
-    const status = c.file ? "OK" : "Chưa có icon";
-    tr.innerHTML = `<td>${c.groupTitle}</td><td>${c.name}</td><td><code>${path}</code></td><td>${status}</td>`;
-    tbody.appendChild(tr);
-  });
-}
+    /* ---------------- Reset ---------------- */
+    document.getElementById("btnReset").addEventListener("click", () => {
+      if (!confirm("Đặt lại toàn bộ số lượng thẻ của cả 2 nick về 0?")) return;
+      state = defaultState();
+      saveState();
+      ACCOUNTS.forEach(acc => document.getElementById("nameInput-" + acc).value = state.names[acc]);
+      renderAllCardsVisual();
+      updateAllProgress();
+      renderTradeSuggestions();
+    });
 
-/* ---------------- Name inputs ---------------- */
-ACCOUNTS.forEach(acc => {
-  document.getElementById("nameInput-" + acc).addEventListener("input", (e) => {
-    state.names[acc] = e.target.value;
-    saveState();
+    /* ---------------- Init ---------------- */
+    ACCOUNTS.forEach(buildAccountColumn);
+    renderAllCardsVisual();
+    updateAllProgress();
     renderTradeSuggestions();
-  });
-});
-
-/* ---------------- Reset ---------------- */
-document.getElementById("btnReset").addEventListener("click", () => {
-  if (!confirm("Đặt lại toàn bộ số lượng thẻ của cả 2 nick về 0?")) return;
-  state = defaultState();
-  saveState();
-  ACCOUNTS.forEach(acc => document.getElementById("nameInput-" + acc).value = state.names[acc]);
-  renderAllCardsVisual();
-  updateAllProgress();
-  renderTradeSuggestions();
-});
-
-/* ---------------- Init ---------------- */
-ACCOUNTS.forEach(buildAccountColumn);
-renderAllCardsVisual();
-updateAllProgress();
-renderTradeSuggestions();
-buildIconRefTable();
-</script>
+    buildIconRefTable();
+  </script>
 </body>
+
 </html>
