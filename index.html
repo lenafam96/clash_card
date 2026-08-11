@@ -64,6 +64,16 @@
           <ul class="trade-list" id="tradeBList"></ul>
         </div>
       </div>
+      <div class="trade-history">
+        <div class="trade-history-head">
+          <h3 id="txtTradeHistoryTitle">Lịch sử trao đổi</h3>
+          <div class="trade-history-actions">
+            <button class="btn mini" id="btnToggleTradeHistory" type="button">Ẩn</button>
+            <button class="btn mini" id="btnUndoTrade" type="button" disabled>Hoàn tác</button>
+          </div>
+        </div>
+        <ul class="trade-history-list" id="tradeHistoryList"></ul>
+      </div>
     </div>
 
     <div class="compare-grid">
@@ -120,6 +130,18 @@
     <footer id="txtFooter">Icon lính có thể lấy tham khảo từ <a href="https://coc.guide/troop" target="_blank"
         rel="noopener">coc.guide</a> rồi tải về thư mục <code>img/</code> cục bộ · Công cụ theo dõi &amp; trao đổi bộ
       sưu tập, không liên kết chính thức với Supercell.</footer>
+  </div>
+
+  <div class="toast-root" id="toastRoot" aria-live="polite" aria-atomic="true"></div>
+  <div class="confirm-layer" id="confirmLayer" hidden>
+    <div class="confirm-backdrop"></div>
+    <div class="confirm-card" role="dialog" aria-modal="true" aria-labelledby="confirmMessage" tabindex="-1">
+      <p id="confirmMessage"></p>
+      <div class="confirm-actions">
+        <button class="btn mini" id="btnConfirmCancel" type="button">Hủy</button>
+        <button class="btn mini confirm-ok" id="btnConfirmOk" type="button">Đồng ý</button>
+      </div>
+    </div>
   </div>
 
   <script src="./app.js"></script>

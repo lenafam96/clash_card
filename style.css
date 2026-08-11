@@ -105,6 +105,11 @@
       background: rgba(240, 178, 60, 0.15);
     }
 
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: 0.45;
+    }
+
     .btn:active {
       transform: scale(0.96);
     }
@@ -277,6 +282,11 @@
       display: flex;
       align-items: center;
       gap: 8px;
+      min-width: 0;
+    }
+
+    .swap-item .side span {
+      min-width: 0;
     }
 
     .swap-item img,
@@ -301,6 +311,88 @@
       color: var(--gold);
       font-weight: 900;
       font-size: 16px;
+    }
+
+    .trade-accept {
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    .trade-list-toggle {
+      align-self: flex-start;
+      margin-top: 8px;
+    }
+
+    .trade-history {
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(240, 178, 60, 0.24);
+    }
+
+    .trade-history-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .trade-history.collapsed .trade-history-head {
+      margin-bottom: 0;
+    }
+
+    .trade-history-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .trade-history-head h3 {
+      font-family: 'Cinzel', serif;
+      font-size: 13px;
+      letter-spacing: .5px;
+      text-transform: uppercase;
+      margin: 0;
+      color: var(--gold-bright);
+    }
+
+    .trade-history-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      max-height: 170px;
+      overflow: auto;
+    }
+
+    .trade-history.collapsed .trade-history-list {
+      display: none;
+    }
+
+    .trade-history-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      padding: 7px 10px;
+      font-size: 12px;
+      color: #d9c9ef;
+    }
+
+    .trade-history-item.latest {
+      border-color: rgba(240, 178, 60, 0.38);
+    }
+
+    .trade-history-item time {
+      color: #8a9a8e;
+      flex-shrink: 0;
+      white-space: nowrap;
     }
 
     /* ---------- Two-column compare grid ---------- */
@@ -769,6 +861,103 @@
       text-decoration: none;
     }
 
+    /* ---------- Toasts + confirm dialog ---------- */
+    .toast-root {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      width: min(360px, calc(100vw - 32px));
+      pointer-events: none;
+    }
+
+    .toast {
+      pointer-events: auto;
+      border: 1px solid rgba(240, 178, 60, 0.42);
+      border-radius: 10px;
+      background: rgba(20, 16, 28, 0.96);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45);
+      color: #f2e6c8;
+      font-size: 12.5px;
+      font-weight: 800;
+      line-height: 1.4;
+      padding: 10px 12px;
+      transform: translateY(0);
+      opacity: 1;
+      transition: opacity .2s ease, transform .2s ease;
+    }
+
+    .toast.success {
+      border-color: rgba(57, 194, 194, 0.58);
+      color: var(--acc-a-2);
+    }
+
+    .toast.error {
+      border-color: rgba(224, 86, 47, 0.72);
+      color: #ffb199;
+    }
+
+    .toast.leaving {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    .confirm-layer[hidden] {
+      display: none;
+    }
+
+    .confirm-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 1001;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .confirm-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.58);
+    }
+
+    .confirm-card {
+      position: relative;
+      width: min(420px, 100%);
+      border: 2px solid var(--gold);
+      border-radius: 14px;
+      background: linear-gradient(180deg, #3a2a55 0%, #24173a 100%);
+      box-shadow: 0 18px 42px rgba(0, 0, 0, 0.55);
+      padding: 16px;
+    }
+
+    .confirm-card:focus {
+      outline: none;
+    }
+
+    .confirm-card p {
+      margin: 0;
+      color: #f2e6c8;
+      font-size: 13px;
+      font-weight: 800;
+      line-height: 1.5;
+    }
+
+    .confirm-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .confirm-ok {
+      background: rgba(240, 178, 60, 0.18);
+    }
+
     @media (max-width:900px) {
       .compare-grid {
         grid-template-columns: 1fr;
@@ -780,6 +969,12 @@
     }
 
     @media (max-width:480px) {
+      .trade-history-item {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 3px;
+      }
+
       .name-tag {
         display: none;
       }

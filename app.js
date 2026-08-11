@@ -209,6 +209,19 @@ const UI_I18N = {
     tradeBHeading: (a, b) => `${b} dư, ${a} đang thiếu`,
     tradeEmptySwap: "Chưa có cặp thẻ nào có thể đổi 1:1 ngay lúc này.",
     tradeEmptyList: "Không có thẻ dư phù hợp.",
+    tradeAcceptBtn: "Đồng ý",
+    tradeAcceptTitle: "Cập nhật số lượng theo trao đổi này",
+    tradeHistoryTitle: "Lịch sử trao đổi",
+    tradeUndoBtn: "Hoàn tác",
+    tradeUndoTitle: "Hoàn tác trao đổi gần nhất",
+    tradeHistoryShowBtn: "Hiện",
+    tradeHistoryHideBtn: "Ẩn",
+    tradeHistoryToggleTitle: "Ẩn/hiện lịch sử trao đổi",
+    tradeShowMoreBtn: (n) => `Xem thêm (${n})`,
+    tradeCollapseBtn: "Thu gọn",
+    tradeHistoryEmpty: "Chưa có trao đổi nào.",
+    tradeHistoryLine: (a, aCard, b, bCard) => `${a} đưa ${aCard} ⇄ ${b} đưa ${bCard}`,
+    alertUndoUnavailable: "Không thể hoàn tác trao đổi này vì số lượng thẻ hiện tại không còn phù hợp.",
     surplus: (n) => `dư x${n}`,
     swapLine: (name, cardName, n) => `<b>${name}</b> đưa <b>${cardName}</b> (dư x${n})`,
     exportBtnLabel: "Xuất",
@@ -235,6 +248,11 @@ const UI_I18N = {
     alertImportedAccount: (label) => `Đã nhập dữ liệu thẻ vào cột ${label}.`,
     confirmOverwriteAll: "Nhập bản sao lưu này sẽ GHI ĐÈ toàn bộ dữ liệu hiện tại của cả 2 nick. Tiếp tục?",
     alertImportedAll: "Đã khôi phục dữ liệu từ file sao lưu.",
+    confirmOk: "Đồng ý",
+    confirmCancel: "Hủy",
+    toastResetDone: "Đã đặt lại toàn bộ dữ liệu.",
+    toastTradeApplied: "Đã cập nhật số lượng theo trao đổi.",
+    toastTradeUndone: "Đã hoàn tác trao đổi gần nhất.",
     defaultNames: { A: "Người chơi A", B: "Người chơi B" },
   },
   en: {
@@ -255,6 +273,19 @@ const UI_I18N = {
     tradeBHeading: (a, b) => `${b} has extra, ${a} is missing`,
     tradeEmptySwap: "No 1:1 swap pairs available right now.",
     tradeEmptyList: "No matching surplus cards.",
+    tradeAcceptBtn: "Accept",
+    tradeAcceptTitle: "Update card counts for this trade",
+    tradeHistoryTitle: "Trade history",
+    tradeUndoBtn: "Undo",
+    tradeUndoTitle: "Undo the latest trade",
+    tradeHistoryShowBtn: "Show",
+    tradeHistoryHideBtn: "Hide",
+    tradeHistoryToggleTitle: "Show or hide trade history",
+    tradeShowMoreBtn: (n) => `Show more (${n})`,
+    tradeCollapseBtn: "Collapse",
+    tradeHistoryEmpty: "No trades yet.",
+    tradeHistoryLine: (a, aCard, b, bCard) => `${a} gives ${aCard} ⇄ ${b} gives ${bCard}`,
+    alertUndoUnavailable: "This trade cannot be undone because the current card counts no longer match.",
     surplus: (n) => `x${n} extra`,
     swapLine: (name, cardName, n) => `<b>${name}</b> gives <b>${cardName}</b> (x${n} extra)`,
     exportBtnLabel: "Export",
@@ -281,6 +312,11 @@ const UI_I18N = {
     alertImportedAccount: (label) => `Card data imported into ${label}.`,
     confirmOverwriteAll: "Importing this backup will OVERWRITE all current data for both accounts. Continue?",
     alertImportedAll: "Data restored from backup file.",
+    confirmOk: "Accept",
+    confirmCancel: "Cancel",
+    toastResetDone: "All data reset.",
+    toastTradeApplied: "Card counts updated for this trade.",
+    toastTradeUndone: "Latest trade undone.",
     defaultNames: { A: "Player A", B: "Player B" },
   },
 };
@@ -310,7 +346,14 @@ function trGroup(groupKey, field) {
 /* ===================== HẾT PHẦN BẢN DỊCH ===================== */
 
 const STORAGE_KEY = "clashCardsCompareV1";
+const TRADE_HISTORY_COLLAPSED_KEY = "clashCardsTradeHistoryCollapsedV1";
 const ACCOUNTS = ["A", "B"];
+const TRADE_LIST_PREVIEW_LIMIT = 3;
+const tradeListExpanded = {
+  swap: false,
+  a: false,
+  b: false,
+};
 
 function initials(name) {
   return name
@@ -350,6 +393,7 @@ function defaultState() {
   return {
     names: { A: UI_I18N[currentLang].defaultNames.A, B: UI_I18N[currentLang].defaultNames.B },
     counts,
+    tradeHistory: [],
   };
 }
 
@@ -380,6 +424,18 @@ function loadState() {
         });
       });
     }
+    if (Array.isArray(saved.tradeHistory)) {
+      state.tradeHistory = saved.tradeHistory
+        .filter(
+          (entry) =>
+            entry &&
+            typeof entry.id === "string" &&
+            typeof entry.at === "string" &&
+            typeof entry.aCardKey === "string" &&
+            typeof entry.bCardKey === "string",
+        )
+        .slice(0, 50);
+    }
   }
   return state;
 }
@@ -393,6 +449,68 @@ function saveState() {
 }
 
 let state = loadState();
+
+function showToast(message, type = "info") {
+  const root = document.getElementById("toastRoot");
+  if (!root) return;
+
+  const toast = document.createElement("div");
+  toast.className = `toast ${type}`;
+  toast.setAttribute("role", type === "error" ? "alert" : "status");
+  toast.textContent = message;
+  root.appendChild(toast);
+
+  window.setTimeout(() => {
+    toast.classList.add("leaving");
+    toast.addEventListener("transitionend", () => toast.remove(), { once: true });
+  }, 3200);
+}
+
+function showConfirm(message) {
+  const layer = document.getElementById("confirmLayer");
+  const card = layer.querySelector(".confirm-card");
+  const messageEl = document.getElementById("confirmMessage");
+  const okBtn = document.getElementById("btnConfirmOk");
+  const cancelBtn = document.getElementById("btnConfirmCancel");
+
+  messageEl.textContent = message;
+  okBtn.textContent = t("confirmOk");
+  cancelBtn.textContent = t("confirmCancel");
+  layer.hidden = false;
+  card.focus();
+
+  return new Promise((resolve) => {
+    const close = (value) => {
+      layer.hidden = true;
+      okBtn.removeEventListener("click", onOk);
+      cancelBtn.removeEventListener("click", onCancel);
+      layer.removeEventListener("click", onLayerClick);
+      document.removeEventListener("keydown", onKeyDown);
+      resolve(value);
+    };
+    const onOk = () => close(true);
+    const onCancel = () => close(false);
+    const onLayerClick = (e) => {
+      if (e.target.classList.contains("confirm-backdrop")) close(false);
+    };
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") close(false);
+    };
+
+    okBtn.addEventListener("click", onOk);
+    cancelBtn.addEventListener("click", onCancel);
+    layer.addEventListener("click", onLayerClick);
+    document.addEventListener("keydown", onKeyDown);
+  });
+}
+
+function loadTradeHistoryCollapsed() {
+  try {
+    return localStorage.getItem(TRADE_HISTORY_COLLAPSED_KEY) === "1";
+  } catch (e) {}
+  return false;
+}
+let tradeHistoryCollapsed = loadTradeHistoryCollapsed();
 
 /* ---------------- Build UI per account ---------------- */
 const cardRefs = { A: {}, B: {} }; // key -> {card, badge}
@@ -541,6 +659,145 @@ function cardMiniHTML(c) {
   return icon;
 }
 
+function findCardByKey(key) {
+  return ALL_CARDS.find((c) => c.key === key);
+}
+
+function applySwapTrade(aCardKey, bCardKey) {
+  const aCanGive = state.counts.A[aCardKey] > 1 && state.counts.B[aCardKey] === 0;
+  const bCanGive = state.counts.B[bCardKey] > 1 && state.counts.A[bCardKey] === 0;
+  if (!aCanGive || !bCanGive) return;
+
+  const aCard = findCardByKey(aCardKey);
+  const bCard = findCardByKey(bCardKey);
+
+  state.counts.A[aCardKey] -= 1;
+  state.counts.B[aCardKey] += 1;
+  state.counts.B[bCardKey] -= 1;
+  state.counts.A[bCardKey] += 1;
+  state.tradeHistory.unshift({
+    id: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    at: new Date().toISOString(),
+    aName: state.names.A,
+    bName: state.names.B,
+    aCardKey,
+    bCardKey,
+    aCardName: aCard ? aCard.name : aCardKey,
+    bCardName: bCard ? bCard.name : bCardKey,
+  });
+  state.tradeHistory = state.tradeHistory.slice(0, 50);
+
+  saveState();
+  renderAllCardsVisual();
+  updateAllProgress();
+  renderTradeSuggestions();
+  showToast(t("toastTradeApplied"), "success");
+}
+
+function undoLatestTrade() {
+  const latest = state.tradeHistory[0];
+  if (!latest) return;
+
+  const canUndo =
+    state.counts.A[latest.aCardKey] < 3 &&
+    state.counts.B[latest.aCardKey] > 0 &&
+    state.counts.B[latest.bCardKey] < 3 &&
+    state.counts.A[latest.bCardKey] > 0;
+
+  if (!canUndo) {
+    showToast(t("alertUndoUnavailable"), "error");
+    return;
+  }
+
+  state.counts.A[latest.aCardKey] += 1;
+  state.counts.B[latest.aCardKey] -= 1;
+  state.counts.B[latest.bCardKey] += 1;
+  state.counts.A[latest.bCardKey] -= 1;
+  state.tradeHistory.shift();
+
+  saveState();
+  renderAllCardsVisual();
+  updateAllProgress();
+  renderTradeSuggestions();
+  showToast(t("toastTradeUndone"), "success");
+}
+
+function renderTradeHistory() {
+  const listEl = document.getElementById("tradeHistoryList");
+  const undoBtn = document.getElementById("btnUndoTrade");
+  const toggleBtn = document.getElementById("btnToggleTradeHistory");
+  const historyEl = document.querySelector(".trade-history");
+  if (!listEl || !undoBtn || !toggleBtn || !historyEl) return;
+
+  historyEl.classList.toggle("collapsed", tradeHistoryCollapsed);
+  toggleBtn.textContent = tradeHistoryCollapsed ? t("tradeHistoryShowBtn") : t("tradeHistoryHideBtn");
+  undoBtn.disabled = state.tradeHistory.length === 0;
+  listEl.innerHTML = "";
+  if (state.tradeHistory.length === 0) {
+    listEl.innerHTML = `<li class="trade-empty">${t("tradeHistoryEmpty")}</li>`;
+    return;
+  }
+
+  state.tradeHistory.forEach((entry, index) => {
+    const aCard = findCardByKey(entry.aCardKey);
+    const bCard = findCardByKey(entry.bCardKey);
+    const aCardName = aCard ? trTroopName(aCard.name) : entry.aCardName;
+    const bCardName = bCard ? trTroopName(bCard.name) : entry.bCardName;
+    const li = document.createElement("li");
+    li.className = "trade-history-item";
+
+    const text = document.createElement("span");
+    text.textContent = t("tradeHistoryLine", entry.aName || "A", aCardName, entry.bName || "B", bCardName);
+
+    const time = document.createElement("time");
+    time.dateTime = entry.at;
+    time.textContent = new Date(entry.at).toLocaleString(currentLang === "vi" ? "vi-VN" : "en-US", {
+      dateStyle: "short",
+      timeStyle: "short",
+    });
+
+    li.appendChild(text);
+    li.appendChild(time);
+    if (index === 0) li.classList.add("latest");
+    listEl.appendChild(li);
+  });
+}
+
+function toggleTradeHistory() {
+  tradeHistoryCollapsed = !tradeHistoryCollapsed;
+  try {
+    localStorage.setItem(TRADE_HISTORY_COLLAPSED_KEY, tradeHistoryCollapsed ? "1" : "0");
+  } catch (e) {}
+  renderTradeHistory();
+}
+
+function renderTradeListToggle(listEl, listKey, totalCount) {
+  const block = listEl.parentElement;
+  const existing = block.querySelector(`.trade-list-toggle[data-list-key="${listKey}"]`);
+  if (existing) existing.remove();
+  if (totalCount <= TRADE_LIST_PREVIEW_LIMIT) return;
+
+  const hiddenCount = totalCount - TRADE_LIST_PREVIEW_LIMIT;
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "btn mini trade-list-toggle";
+  btn.dataset.listKey = listKey;
+  btn.textContent = tradeListExpanded[listKey]
+    ? t("tradeCollapseBtn")
+    : t("tradeShowMoreBtn", hiddenCount);
+  btn.addEventListener("click", () => {
+    tradeListExpanded[listKey] = !tradeListExpanded[listKey];
+    renderTradeSuggestions();
+  });
+  block.appendChild(btn);
+}
+
+function visibleTradeItems(items, listKey) {
+  return tradeListExpanded[listKey]
+    ? items
+    : items.slice(0, TRADE_LIST_PREVIEW_LIMIT);
+}
+
 function renderTradeSuggestions() {
   const nameA = state.names.A || "A";
   const nameB = state.names.B || "B";
@@ -554,46 +811,66 @@ function renderTradeSuggestions() {
     (c) => state.counts.B[c.key] > 1 && state.counts.A[c.key] === 0,
   );
 
-  // 1:1 swap pairing (greedy, first-come)
-  const swapCount = Math.min(aSurplus.length, bSurplus.length);
+  // 1:1 swap pairing by troop type/group only.
   const swapPairs = [];
-  for (let i = 0; i < swapCount; i++)
-    swapPairs.push([aSurplus[i], bSurplus[i]]);
-  const aOnly = aSurplus.slice(swapCount);
-  const bOnly = bSurplus.slice(swapCount);
+  const aOnly = [];
+  const bMatchedKeys = new Set();
+
+  aSurplus.forEach((ca) => {
+    const cb = bSurplus.find(
+      (candidate) =>
+        !bMatchedKeys.has(candidate.key) &&
+        candidate.groupKey === ca.groupKey,
+    );
+    if (cb) {
+      swapPairs.push([ca, cb]);
+      bMatchedKeys.add(cb.key);
+    } else {
+      aOnly.push(ca);
+    }
+  });
+  const bOnly = bSurplus.filter((c) => !bMatchedKeys.has(c.key));
 
   const swapList = document.getElementById("tradeSwapList");
   swapList.innerHTML = "";
   if (swapPairs.length === 0) {
     swapList.innerHTML = `<li class="trade-empty">${t("tradeEmptySwap")}</li>`;
   } else {
-    swapPairs.forEach(([ca, cb]) => {
+    visibleTradeItems(swapPairs, "swap").forEach(([ca, cb]) => {
       const li = document.createElement("li");
       li.className = "swap-item";
       li.innerHTML = `
         <div class="side">${cardMiniHTML(ca)}<span>${t("swapLine", nameA, trTroopName(ca.name), state.counts.A[ca.key])}</span></div>
         <span class="swap-arrow">⇄</span>
         <div class="side">${cardMiniHTML(cb)}<span>${t("swapLine", nameB, trTroopName(cb.name), state.counts.B[cb.key])}</span></div>
+        <button type="button" class="btn mini trade-accept" title="${t("tradeAcceptTitle")}">${t("tradeAcceptBtn")}</button>
       `;
+      li
+        .querySelector(".trade-accept")
+        .addEventListener("click", () => applySwapTrade(ca.key, cb.key));
       swapList.appendChild(li);
     });
   }
+  renderTradeListToggle(swapList, "swap", swapPairs.length);
 
-  const fillList = (listEl, cards, acc) => {
+  const fillList = (listEl, cards, acc, listKey) => {
     listEl.innerHTML = "";
     if (cards.length === 0) {
       listEl.innerHTML = `<li class="trade-empty">${t("tradeEmptyList")}</li>`;
+      renderTradeListToggle(listEl, listKey, cards.length);
       return;
     }
-    cards.forEach((c) => {
+    visibleTradeItems(cards, listKey).forEach((c) => {
       const li = document.createElement("li");
       li.className = "trade-item";
       li.innerHTML = `${cardMiniHTML(c)}<span>${trTroopName(c.name)}</span><span class="amt">${t("surplus", state.counts[acc][c.key])}</span>`;
       listEl.appendChild(li);
     });
+    renderTradeListToggle(listEl, listKey, cards.length);
   };
-  fillList(document.getElementById("tradeAList"), aOnly, "A");
-  fillList(document.getElementById("tradeBList"), bOnly, "B");
+  fillList(document.getElementById("tradeAList"), aOnly, "A", "a");
+  fillList(document.getElementById("tradeBList"), bOnly, "B", "b");
+  renderTradeHistory();
 }
 
 /* ---------------- Icon reference table ---------------- */
@@ -629,6 +906,13 @@ function applyStaticI18n() {
   document.getElementById("txtTradeTitle").textContent = t("tradeTitle");
   document.getElementById("txtTradeDesc").textContent = t("tradeDesc");
   document.getElementById("txtTradeSwapTitle").textContent = t("tradeSwapTitle");
+  document.getElementById("txtTradeHistoryTitle").textContent = t("tradeHistoryTitle");
+  const undoBtn = document.getElementById("btnUndoTrade");
+  const toggleHistoryBtn = document.getElementById("btnToggleTradeHistory");
+  toggleHistoryBtn.textContent = tradeHistoryCollapsed ? t("tradeHistoryShowBtn") : t("tradeHistoryHideBtn");
+  toggleHistoryBtn.title = t("tradeHistoryToggleTitle");
+  undoBtn.textContent = t("tradeUndoBtn");
+  undoBtn.title = t("tradeUndoTitle");
 
   ACCOUNTS.forEach((acc) => {
     const name = state.names[acc];
@@ -685,6 +969,8 @@ function setLanguage(lang) {
 
 document.getElementById("langBtnVi").addEventListener("click", () => setLanguage("vi"));
 document.getElementById("langBtnEn").addEventListener("click", () => setLanguage("en"));
+document.getElementById("btnToggleTradeHistory").addEventListener("click", toggleTradeHistory);
+document.getElementById("btnUndoTrade").addEventListener("click", undoLatestTrade);
 
 /* ---------------- Name inputs ---------------- */
 ACCOUNTS.forEach((acc) => {
@@ -697,8 +983,8 @@ ACCOUNTS.forEach((acc) => {
 });
 
 /* ---------------- Reset ---------------- */
-document.getElementById("btnReset").addEventListener("click", () => {
-  if (!confirm(t("confirmReset"))) return;
+document.getElementById("btnReset").addEventListener("click", async () => {
+  if (!(await showConfirm(t("confirmReset")))) return;
   state = defaultState();
   saveState();
   ACCOUNTS.forEach(
@@ -709,6 +995,7 @@ document.getElementById("btnReset").addEventListener("click", () => {
   updateAllProgress();
   renderTradeSuggestions();
   applyStaticI18n();
+  showToast(t("toastResetDone"), "success");
 });
 
 /* =========================================================================
@@ -763,6 +1050,7 @@ function exportAllJSON() {
     exportedAt: new Date().toISOString(),
     names: state.names,
     counts: state.counts,
+    tradeHistory: state.tradeHistory,
   };
   downloadJSON(
     `clash-cards-backup-${new Date().toISOString().slice(0, 10)}.json`,
@@ -784,12 +1072,12 @@ function sanitizeCounts(rawCounts) {
 /** Nhập JSON của 1 nick (do người chơi khác gửi) vào 1 cột được chọn */
 function importAccountJSON(acc, file) {
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = async (e) => {
     let data;
     try {
       data = JSON.parse(e.target.result);
     } catch (err) {
-      alert(t("alertInvalidJSON"));
+      showToast(t("alertInvalidJSON"), "error");
       return;
     }
 
@@ -801,7 +1089,7 @@ function importAccountJSON(acc, file) {
         : data.counts;
 
     if (!rawCounts || typeof rawCounts !== "object") {
-      alert(t("alertMissingCounts"));
+      showToast(t("alertMissingCounts"), "error");
       return;
     }
 
@@ -809,11 +1097,12 @@ function importAccountJSON(acc, file) {
       data.type === "full-backup" ? data.names && data.names[acc] : data.player;
     let applyName = false;
     if (importedName && importedName !== state.names[acc]) {
-      applyName = confirm(t("confirmNameUpdate", acc, importedName));
+      applyName = await showConfirm(t("confirmNameUpdate", acc, importedName));
     }
 
     state.counts[acc] = sanitizeCounts(rawCounts);
     if (applyName) state.names[acc] = importedName;
+    state.tradeHistory = [];
 
     saveState();
     document.getElementById("nameInput-" + acc).value = state.names[acc];
@@ -821,7 +1110,7 @@ function importAccountJSON(acc, file) {
     updateAllProgress();
     renderTradeSuggestions();
     applyStaticI18n();
-    alert(t("alertImportedAccount", acc === "A" ? "Nick A" : "Nick B"));
+    showToast(t("alertImportedAccount", acc === "A" ? "Nick A" : "Nick B"), "success");
   };
   reader.readAsText(file);
 }
@@ -829,21 +1118,21 @@ function importAccountJSON(acc, file) {
 /** Nhập bản sao lưu đầy đủ (cả 2 nick + tên) */
 function importAllJSON(file) {
   const reader = new FileReader();
-  reader.onload = (e) => {
+  reader.onload = async (e) => {
     let data;
     try {
       data = JSON.parse(e.target.result);
     } catch (err) {
-      alert(t("alertInvalidJSON"));
+      showToast(t("alertInvalidJSON"), "error");
       return;
     }
 
     if (!data.counts) {
-      alert(t("alertMissingCounts"));
+      showToast(t("alertMissingCounts"), "error");
       return;
     }
 
-    if (!confirm(t("confirmOverwriteAll"))) return;
+    if (!(await showConfirm(t("confirmOverwriteAll")))) return;
 
     ACCOUNTS.forEach((acc) => {
       const rawCounts =
@@ -851,6 +1140,18 @@ function importAllJSON(file) {
       state.counts[acc] = sanitizeCounts(rawCounts);
       if (data.names && data.names[acc]) state.names[acc] = data.names[acc];
     });
+    state.tradeHistory = Array.isArray(data.tradeHistory)
+      ? data.tradeHistory
+          .filter(
+            (entry) =>
+              entry &&
+              typeof entry.id === "string" &&
+              typeof entry.at === "string" &&
+              typeof entry.aCardKey === "string" &&
+              typeof entry.bCardKey === "string",
+          )
+          .slice(0, 50)
+      : [];
 
     saveState();
     ACCOUNTS.forEach(
@@ -861,7 +1162,7 @@ function importAllJSON(file) {
     updateAllProgress();
     renderTradeSuggestions();
     applyStaticI18n();
-    alert(t("alertImportedAll"));
+    showToast(t("alertImportedAll"), "success");
   };
   reader.readAsText(file);
 }
