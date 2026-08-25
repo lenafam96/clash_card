@@ -349,6 +349,7 @@ const STORAGE_KEY = "clashCardsCompareV1";
 const TRADE_HISTORY_COLLAPSED_KEY = "clashCardsTradeHistoryCollapsedV1";
 const ACCOUNTS = ["A", "B"];
 const TRADE_LIST_PREVIEW_LIMIT = 3;
+const MAX_COUNT_PER_CARD = 5; // max x3
 const tradeListExpanded = {
   swap: false,
   a: false,
@@ -419,7 +420,7 @@ function loadState() {
         const savedAcc = saved.counts[acc] || {};
         ALL_CARDS.forEach((c) => {
           const v = savedAcc[c.key];
-          if (typeof v === "number" && v >= 0 && v <= 3)
+          if (typeof v === "number" && v >= 0 && v <= MAX_COUNT_PER_CARD)
             state.counts[acc][c.key] = v;
         });
       });
@@ -1064,7 +1065,7 @@ function sanitizeCounts(rawCounts) {
   ALL_CARDS.forEach((c) => {
     const v = rawCounts ? rawCounts[c.key] : undefined;
     clean[c.key] =
-      typeof v === "number" && v >= 0 && v <= 3 ? Math.round(v) : 0;
+      typeof v === "number" && v >= 0 && v <= MAX_COUNT_PER_CARD ? Math.round(v) : 0;
   });
   return clean;
 }
