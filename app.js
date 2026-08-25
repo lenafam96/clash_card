@@ -583,7 +583,7 @@ function buildAccountColumn(acc) {
       card.appendChild(tag);
 
       card.addEventListener("click", () => {
-        state.counts[acc][key] = (state.counts[acc][key] + 1) % 4;
+        state.counts[acc][key] = (state.counts[acc][key] + 1) % (MAX_COUNT_PER_CARD + 1);
         saveState();
         renderCardVisual(acc, key);
         updateAccountProgress(acc);
@@ -700,9 +700,9 @@ function undoLatestTrade() {
   if (!latest) return;
 
   const canUndo =
-    state.counts.A[latest.aCardKey] < 3 &&
+    state.counts.A[latest.aCardKey] < MAX_COUNT_PER_CARD &&
     state.counts.B[latest.aCardKey] > 0 &&
-    state.counts.B[latest.bCardKey] < 3 &&
+    state.counts.B[latest.bCardKey] < MAX_COUNT_PER_CARD &&
     state.counts.A[latest.bCardKey] > 0;
 
   if (!canUndo) {
@@ -1059,7 +1059,7 @@ function exportAllJSON() {
   );
 }
 
-/** Kiểm tra & chuẩn hoá một object counts thô thành counts hợp lệ (đủ key, giá trị 0-3) */
+/** Kiểm tra & chuẩn hoá một object counts thô thành counts hợp lệ (đủ key, giá trị 0-MAX_COUNT_PER_CARD) */
 function sanitizeCounts(rawCounts) {
   const clean = {};
   ALL_CARDS.forEach((c) => {
